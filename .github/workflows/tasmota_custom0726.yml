@@ -1,7 +1,6 @@
-name: Build_ESP32_Custom
+name: Build_ESP32_Custom_Tasmota
 
-# to build single esp32 custom tasmota image
-# adding rtc ds3231 and Bluetooth ble support
+# tasmota 15.5 with additional rtc ds3231 and Bluetooth support.
 
 on:
   workflow_dispatch:
@@ -25,9 +24,10 @@ jobs:
         with:
           python-version: '3.13'
 
-      - name: Install PlatformIO
+      - name: Install dependencies
         run: |
-          pip install pioarduino
+          pip install uv
+          uv pip install --system pioarduino
           cp ./platformio_override_sample.ini ./platformio_override.ini
 
       - name: Add SHA to footer
@@ -36,7 +36,7 @@ jobs:
           SHA=${COMMIT_SHA_LONG::7}
           sed -i -e "s/TASMOTA_SHA_SHORT/TASMOTA_SHA_SHORT $SHA-/g" ./tasmota/include/tasmota_version.h
 
-      - name: Build ESP32 Tasmota
+      - name: Build ESP32
         env:
           PYTHONIOENCODING: utf-8
           PYTHONUTF8: '1'
