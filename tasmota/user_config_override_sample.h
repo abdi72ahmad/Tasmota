@@ -94,9 +94,9 @@ Examples :
 #define USE_DS3231
 #endif
 
-#ifndef USE_BLE_ESP32
-#define USE_BLE_ESP32
-#endif
+//#ifndef USE_BLE_ESP32
+//#define USE_BLE_ESP32
+//#endif
 
 
 
