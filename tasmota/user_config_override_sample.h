@@ -86,6 +86,17 @@ Examples :
 
 // !!! Remember that your changes GOES AT THE BOTTOM OF THIS FILE right before the last #endif !!!
 */
+#ifndef USE_RTC_CHIPS
+#define USE_RTC_CHIPS
+#endif
+
+#ifndef USE_DS3231
+#define USE_DS3231
+#endif
+
+#ifndef USE_BLE_ESP32
+#define USE_BLE_ESP32
+#endif
 
 
 
