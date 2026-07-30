@@ -1,0 +1,67 @@
+name: Build_ESP32_Custom_Tasmota_202607301331
+
+# Tasmota 15.5 with DS3231 RTC and Bluetooth support
+# build date 202607301331
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: environment-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-esp32:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v6
+        with:
+          ref: development
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv pip install --system pioarduino
+          cp ./platformio_override_sample.ini ./platformio_override.ini
+
+      - name: Enable DS3231 RTC support
+        run: |
+          cat > ./tasmota/user_config_override.h <<'EOF'
+          #ifndef USE_RTC_CHIPS
+          #define USE_RTC_CHIPS
+          #endif
+
+          #ifndef USE_DS3231
+          #define USE_DS3231
+          #endif
+          EOF
+
+      - name: Add SHA to footer
+        run: |
+          COMMIT_SHA_LONG=$(git rev-parse --short HEAD || echo "")
+          SHA=${COMMIT_SHA_LONG::7}
+          sed -i -e "s/TASMOTA_SHA_SHORT/TASMOTA_SHA_SHORT $SHA-/g" ./tasmota/include/tasmota_version.h
+
+      - name: Clean previous build
+        run: |
+          platformio run -t clean -e tasmota32-bluetooth
+
+      - name: Build ESP32 Bluetooth + DS3231
+        env:
+          PYTHONIOENCODING: utf-8
+          PYTHONUTF8: '1'
+        run: |
+          platformio run -e tasmota32-bluetooth
+
+      - name: Upload firmware
+        uses: actions/upload-artifact@v7
+        with:
+          name: tasmota32-bluetooth-ds3231-custom
+          path: ./build_output
