@@ -94,6 +94,33 @@ Examples :
 #define USE_DS3231
 #endif
 
+#ifdef USE_DOMOTICZ
+#undef USE_DOMOTICZ
+#endif
+
+#ifdef USE_KNX
+#undef USE_KNX
+#endif
+
+#ifdef USE_HOME_ASSISTANT
+#undef USE_HOME_ASSISTANT
+#endif
+
+// Remove Tasmota BLE functionality
+
+#ifdef USE_BLE_ESP32
+#undef USE_BLE_ESP32
+#endif
+
+#ifdef USE_MI32
+#undef USE_MI32
+#endif
+
+// adding new classic Arduino bt.serial
+#define USE_BT_CONSOLE
+
+
+
 //#ifndef USE_BLE_ESP32
 //#define USE_BLE_ESP32
 //#endif
