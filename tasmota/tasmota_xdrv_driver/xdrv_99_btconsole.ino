@@ -2,7 +2,10 @@
 
 #include "BluetoothSerial.h"
 
+extern void ExecuteCommand(const char *cmnd, uint32_t source);
+
 BluetoothSerial BtSerial;
+
 
 char BtBuffer[256];
 uint16_t BtIndex = 0;
