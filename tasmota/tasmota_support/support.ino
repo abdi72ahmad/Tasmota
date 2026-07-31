@@ -2925,6 +2925,16 @@ void AddLog(uint32_t loglevel, PGM_P formatP, ...) {
     if (log_data == nullptr) { return; }
 
     AddLogData(loglevel, log_data);
+	  
+	  // additional for bt-serial
+	  #ifdef USE_BT_CONSOLE
+BtConsoleSend(log_data);
+#endif
+if ((loglevel <= highest_loglevel) &&
+    (TasmotaGlobal.masterlog_level <= highest_loglevel)) {
+  AddLogData(loglevel, log_data);
+}
+	  
     free(log_data);
   }
 }
