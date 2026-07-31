@@ -511,17 +511,20 @@ void CommandHandler(char* topicBuf, char* dataBuf, uint32_t data_len) {
   free(command_line);
 
   if (ResponseLength()) {
+    // additional for bt-serial
+    #ifdef USE_BT_CONSOLE
+  if (BtConsoleConnected()) {
+    BtConsoleSend(ResponseData());
+  }
+#endif
+    
+    
+    
     if (TasmotaGlobal.no_mqtt_response){  // If it is activated, Tasmota will not publish MQTT messages, but it will proccess event trigger rules
       XdrvRulesProcess(0);
     } else {
       MqttPublishPrefixTopicRulesProcess_P(RESULT_OR_STAT, type);
-      // additional for bt-serial
-      #ifdef USE_BT_CONSOLE
-if (BtConsoleConnected()) {
-  BtConsoleSend(ResponseData());
-}
-#endif
-
+      
     }
   }
   TasmotaGlobal.fallback_topic_flag = false;
