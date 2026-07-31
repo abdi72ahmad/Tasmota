@@ -106,6 +106,16 @@ Examples :
 #undef USE_HOME_ASSISTANT
 #endif
 
+#undef USE_DOMOTICZ
+#undef USE_KNX
+
+#undef USE_BLE_ESP32
+#undef USE_MI_ESP32
+#undef USE_BLE_ESP32_ADV
+#undef USE_IBEACON
+#undef USE_HM10
+#undef USE_BLE_ESP32_SERIAL
+
 // Remove Tasmota BLE functionality
 
 #ifdef USE_BLE_ESP32
